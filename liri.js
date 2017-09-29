@@ -2,7 +2,7 @@
 var keys =  require("./keys.js");
 
 console.log("\r\n" + "Try any of the following commands after 'node liri.js': " +"\r\n"+
-			"1. my-tweets " +"\r\n"+
+			"1. my-tweets 'any twitter user name'" +"\r\n"+
 			"2. spotify-this-song 'any song name' "+"\r\n"+
 			"3. movie-this 'any movie name' "+"\r\n"+
 			"4. do-what-it-says"+"\r\n"+
@@ -43,10 +43,16 @@ var spotify = new Spotify({
 });
 
 function spotifyThisSong(songName){
-	var songName = process.argv[3];
-	if(!songName){
+	var test = process.argv[3];
+
+	if (!songName && !test){
 		songName = "The Sign, Ace of Base";
 	}
+
+	else if(!songName){
+		songName = process.argv[3];
+	}
+
 params = songName;
  
 spotify.search({ type: 'track', query: params }, function(err, data) {
@@ -102,18 +108,18 @@ function movieThis(){
 // Do what is says function will read command from a random text file and appropriatley do as it says!
 var fs = require("fs");
 
-function doWhatItSays(){
-	fs.readFile("random.txt", "utf8", function(error, data){
-		if(!error){
-			console.log(data);
-			var resultArr = data.split(",");
-		}
+function doWhatItSays() {
+		fs.readFile("random.txt", "utf8", function(error, data){
+			if (!error) {
+				results = data.split(",");
+				var songName = results[1];
+				spotifyThisSong(songName);
 
-		else{
-			console.log("Error occured: "+ error);
-		}
-	});
-};
+			} else {
+				console.log("Error occurred" + error);
+			}
+		});
+	};
 
 // ---------------------------------------------------------------
 	// listing all functions with cases to be able to call inside of Node
